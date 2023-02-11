@@ -1,0 +1,221 @@
+ .\a.exe        
+Welcome to the Gerrymandering App!
+Data loaded? No
+State: N/A
+
+Enter command:
+-----------------------------
+
+load districts_short.txt eligible_voters_short.txt
+reading: districts_short.txt
+...Montana...1 districts total
+
+...California...53 districts total
+
+...Connecticut...5 districts total
+
+...Illinois...18 districts total
+
+...Iowa...4 districts total
+
+...Nebraska...3 districts total
+
+...Rhode Island...2 districts total
+
+...New Mexico...3 districts total
+
+...Minnesota...8 districts total
+
+...Colorado...7 districts total
+
+reading: eligible_voters_short.txt
+...California...25278803 eligible Voters
+
+...Colorado...3978892 eligible Voters
+
+...Connecticut...2572337 eligible Voters
+
+...Illinois...8983758 eligible Voters
+
+...Iowa...2297129 eligible Voters
+
+...Minnesota...3972330 eligible Voters
+
+...Montana...803833 eligible Voters
+
+...Nebraska...1353558 eligible Voters
+
+...New Mexico...1459901 eligible Voters
+
+...Rhode Island...786111 eligible Voters
+
+*********************************************************
+ourvector<4vote> stats:
+ # of vectors created:   1
+ # of elements inserted: 10
+ # of elements accessed: 20
+*********************************************************
+data loaded? Yes
+State: N/A
+
+Enter Command:
+-----------------------------
+search british columbia
+State does not exist, search again.
+
+data loaded? Yes
+State: N/A
+
+Enter Command:
+-----------------------------
+search new mexico
+data loaded? Yes
+State: New Mexico
+
+Enter Command:
+-----------------------------
+stats
+
+Gerrymandered: Yes
+Gerrymandered against: Republicans
+Efficiency Factor: 15.1427%
+Wasted Democratic votes: 89192
+Wasted Republican votes: 166687
+Eligible voters: 1459901
+data loaded? Yes
+State: New Mexico
+
+Enter Command:
+-----------------------------
+search Rhode Island
+data loaded? Yes
+State: Rhode Island
+
+Enter Command:
+-----------------------------
+stats
+
+Gerrymandered: No
+Wasted Democratic votes: 35026
+Wasted Republican votes: 122721
+Eligible voters: 786111
+data loaded? Yes
+State: Rhode Island
+
+Enter Command:
+-----------------------------
+search Colorado
+data loaded? Yes
+State: Colorado
+
+Enter Command:
+-----------------------------
+plot
+District: 1
+DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR
+District: 2
+DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR
+District: 3
+DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR
+District: 4
+DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR
+District: 5
+DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR
+District: 6
+DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR
+District: 7
+DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR
+data loaded? Yes
+State: Colorado
+
+Enter Command:
+-----------------------------
+search Montana
+data loaded? Yes
+State: Montana
+
+Enter Command:
+-----------------------------
+stats
+
+Gerrymandered: No
+Wasted Democratic votes: 148690
+Wasted Republican votes: 27590
+Eligible voters: 803833
+data loaded? Yes
+State: Montana
+
+Enter Command:
+-----------------------------
+search Connecticut
+data loaded? Yes
+State: Connecticut
+
+Enter Command:
+-----------------------------
+stats
+
+Gerrymandered: Yes
+Gerrymandered against: Republicans
+Efficiency Factor: 29.0627%
+Wasted Democratic votes: 110465
+Wasted Republican votes: 417138
+Eligible voters: 2572337
+data loaded? Yes
+State: Connecticut
+
+Enter Command:
+-----------------------------
+plot
+District: 1
+DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR
+District: 2
+DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR
+District: 3
+DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR
+District: 4
+DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR
+District: 5
+DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR
+data loaded? Yes
+State: Connecticut
+
+Enter Command:
+-----------------------------
+exit
+*********************************************************
+ourvector<i> stats:
+ # of vectors created:   90
+ # of elements inserted: 989
+ # of elements accessed: 882
+*********************************************************
+*********************************************************
+ourvector<5state> stats:
+ # of vectors created:   1
+ # of elements inserted: 10
+ # of elements accessed: 257
+*********************************************************
+
+
+ourvector<5state>: this ourvecotr holds the structs of states that are used throughout
+the entire code. by creating a ourvector of structs, i am able to easily access
+information about a state using its index in the ourvector of states. this ourvector is 
+created at the start of main (line 311) which is then accessed by reference through most 
+if not all functions. because only 10 states were loaded, only 10 elements were inserted, then 
+it is accessed thought the entire code by refference.
+
+ourvector<i>: this ourvector represents all the basic ourvectors that I used throughout my
+code, which includes the values of repnum and demnum, which are in the ourvector struct. 
+I created a ourvector of this type on lines: 311, 212, and 77. on 311 I created the ourvector
+of states which also created an ourvector for demnum as well as repnum. on 212 I created a
+ourvector to count the total number of voters in each district. on line 77 I created a ourvector,
+so i could print out the second files eligible_voters information in the order it was read. 
+the last ourvector i created was not required for the code to work, however because of the output
+format, this vecotr was required given my implementation of the code. in the load function 78 vectors would
+be created because there were 10 states loaded in from each file, and 2 sub ourvectors were created for 
+repnum and demnum, which would be 30 our vectors. I am unsure where they come in, but an additional 38 
+ourvectors are made just from loading in the files. i could guess 2 come from the tem variable, however 
+I cant see why more then that are created. 
+ every time you make a call to stats, it creates 3 more ourvectors, and since stats was called 
+4 times, there are 12 more ourvectors.
+In total i account for +/-44 our vectors that were created and cant account for 36 of them.
