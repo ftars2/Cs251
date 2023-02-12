@@ -1,0 +1,11 @@
+{
+    "files.associations": {
+        "xtree": "cpp",
+        "iosfwd": "cpp",
+        "xstring": "cpp",
+        "utility": "cpp",
+        "ostream": "cpp",
+        "map": "cpp",
+        "algorithm": "cpp"
+    }
+}
