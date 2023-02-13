@@ -34,7 +34,7 @@ set<string> song;
 struct settle{
     bool m=false;
     bool p=false;
-    string found;
+    set<string> found;
     string lost;
 };
 
@@ -201,7 +201,8 @@ string tempsym;
 set <string> nset;
 set<settle> sset;
 settle tem;
-
+map <string,set<string>> tset;
+set <string> ttset;
 splitFirstWord(com,type,temp);
 if(temp==""){
 cout<<"Error: Search terms cannot be empty.\nNo results found.\n\n";
@@ -218,28 +219,28 @@ break;
 }
     splitFirstWord(temp,temp1,temp);
 place.insert(temp1);
-//  if(!100>temp1.find('+')){
-//     tem.lost=(temp1);
-//     tem.p=true;
+ if(!100>temp1.find('+')){
+    tem.lost=(temp1);
+    tem.p=true;
 
-// }
-//  if(!100>temp1.find('+')){
-//     tem.lost=(temp1);
-//     tem.m=true;
-// }
-// sset.insert(tem);
 }
-// for( auto& palace : sset){
-//     for( auto name: library){
-//             tname=(name.first);
-//             tolower(tname);
+ if(!100>temp1.find('+')){
+    tem.lost=(temp1);
+    tem.m=true;
+}
+sset.insert(tem);
+}
+for( auto& palace : sset){
+    for( auto name: library){
+            tname=(name.first);
+            tolower(tname);
 
-//             if(100>tname.find(palace.lost)){
-//                 const_cast<string&>(palace.found)=name.second.album;
-//             }
-//         }
-
-// }
+            if(100>tname.find(palace.lost)){
+                ttset.insert<
+            }
+        }
+                tset.insert({palace.lost,name.first});
+}
 
 
 
