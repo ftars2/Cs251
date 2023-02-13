@@ -190,52 +190,118 @@ set <string> place;
 string temp;
 string temp1;
 string tname;
+string tname2;
+string tempsym;
+set <string> nset;
 int i=0;
 splitFirstWord(com,type,temp);
+if(temp==""){
+cout<<"Error: Search terms cannot be empty.\nNo results found.\n\n";
+return;
+}
+//cout<<"\n\ntype "<<type<<"\n\n";
 while(true){
+//cout<<"\n\n temp: "<<temp<<"\n\ntemp1: "<<temp1;
     i++;
 if(temp==""){
 //cout<<"this worked"<<i;
 break;
 }
     splitFirstWord(temp,temp1,temp);
+    tempsym=temp1;
 place.insert(temp1);
 }
 if(type=="album"){
+    if(!isalnum(tempsym.at(0))){
+           
+    }
     for(const auto look : place){
         for( const auto name: library){
             tname=(name.first);
             tolower(tname);
 
-            if(look==tname){
-                cout<<"Your search results exist in the following albums: "<<endl<<name.first<<endl<<endl;
-                return;
+            if(100>tname.find(look)){
+                nset.insert(name.first);
+                //cout<<"\n\nlook: "<<look<<"\n\ntname: "<<tname;
 
+                
             }
         }
     }
+                cout<<"Your search results exist in the following albums: "<<endl;
+                for (const auto lol : nset){
+                    cout<<lol<<endl;
+                }
+                cout<<endl;
 }
 if(type=="artist"){
     for(const auto look : place){
         for( const auto name: library){
-            for(const auto place : name.second.artist){
-            tname=(place);
+            for(const auto person : name.second.artist){
+
+            tname=(person);
             tolower(tname);
 
-            if(look==tname){
-                cout<<"Your search results exist in the following albums: "<<endl<<name.first<<endl<<endl;
-                return;
+            if(100>tname.find(look)){
+                nset.insert(name.first);
+                //cout<<"\n\nlook: "<<look<<"\n\ntname: "<<tname;
             }
-            
+                } }    }
+                cout<<"Your search results exist in the following albums: "<<endl;
+                for (const auto lol : nset){
+                    cout<<lol<<endl;
+                }
+                cout<<endl;
+}
+if(type=="song"){
+    for(const auto look : place){
+        for( const auto name: library){
+            for(const auto music : name.second.song){
 
+            tname=(music);
+            tolower(tname);
+
+            if(100>tname.find(look)){
+                nset.insert(name.first);
+                //cout<<"\n\nlook: "<<look<<"\n\ntname: "<<tname;
             }
-        }
+                } }    }
+                cout<<"Your search results exist in the following albums: "<<endl;
+                for (const auto lol : nset){
+                    cout<<lol<<endl;
+                }
+                cout<<endl;
+}
+
+}
+void exports(map <string, musicl> library, string remains){
+ofstream output;
+bool notfirst=false;
+if(remains==""){
+ output.open("musicdatabase.txt");
+}
+else{
+     output.open(remains);
+}
+for(const auto name: library){
+    if(notfirst){
+        output<<endl;
     }
+    output<<name.second.album<<endl;
+    for(const auto person : name.second.artist){
+        output<<person<<endl;
+        
+    }
+    for(const auto song: name.second.song){
+        output<<song<<endl;
+    }
+    output<<name.first;
+    notfirst=true;
+    }
+output<<endl;
+output.close();
+return;
 }
-
-
-}
-
 
 int main()
 {
@@ -272,7 +338,7 @@ int main()
         }
         else if (command == "export")
         {
-            cout<< remains;
+            exports(lib, remains);
         
             // TODO
         }
