@@ -27,40 +27,57 @@
 
 //contains the info of music libraries
 struct musicl{
-set<string> album;
-map<string,set<string>> artist;
-map<string,set<string>> song;
+string album;
+set<string> artist;
+set<string> song;
+};
+struct settle{
+    bool m=false;
+    bool p=false;
+    string found;
+    string lost;
 };
 
-musicl load(string loc, map<string, musicl> library){
-// musicl talbum;
-// string temp;
-// string tempa="";
-// bool albumred=false;
-// //bool artred=false;
-// fstream s;
+map<string,musicl> load(string loc, map<string, musicl> library){
+musicl talbum;
+string temp;
+string tempa="";
+bool albumred=false;
+//bool artred=false;
+fstream s;
 
-// if(loc==("nothing")||loc==("")){
-// s.open("musicdatabase.txt");
-// //cout<<loc;
-// }
-// else{
-//  s.open(loc);
-//  if(!s.is_open()){
-//     cout<<"Error: Could not open music library file - "<<loc<<endl;
-//  }}
-// return library;
-// }}
+ if(loc==("nothing")||loc==("")){
+ s.open("musicdatabase.txt");
+ //cout<<loc;
+ }
+else{
+ s.open(loc);
+ if(!s.is_open()){
+    cout<<"Error: Could not open music library file - "<<loc<<endl;
+return library;
+ }
+ }
 
-// while(getline(s,temp)){
-// if(!albumred){
-// library.album.insert(temp);
-// albumred=true;
-// tempa=temp;
-// }
-// else if(!isdigit(temp.at(0))){
-//     // library.artist.insert({tempa,temp});
-// auto it = library.artist.find(tempa);
+
+while(getline(s,temp)){
+//cout<<tempa<<endl;
+if(!albumred){
+ talbum.album=(temp);
+ albumred=true;
+ tempa=temp;
+ }
+ else if((albumred) && (temp==tempa)){
+     albumred=false;
+     library.insert({tempa,talbum});
+     talbum.artist.clear();
+    talbum.song.clear();
+ //   cout<<"\n\nsize"<<"\n\n";
+  //  cout<<"hi";
+ }
+ else if(!isdigit(temp.at(0))){
+talbum.artist.insert(temp);
+     // library.artist.insert({tempa,temp});
+// auto it = talbum.artist.find(tempa);
 //     if(it==library.artist.end()){
 //         set<string> tset = {temp};
 //         library.artist[tempa] = tset;
@@ -70,9 +87,11 @@ musicl load(string loc, map<string, musicl> library){
 //         artistset.insert(temp);
 //     }
 
-// }
+ }
 
-// else if(isdigit(temp.at(0))){
+ else if(isdigit(temp.at(0))){
+    talbum.song.insert(temp);
+
 //     auto it = library.song.find(tempa);
 //     if(it==library.song.end()){
 //         set<string> tset = {temp};
@@ -82,32 +101,68 @@ musicl load(string loc, map<string, musicl> library){
 //         set<string>& songset = library.song[tempa];
 //         songset.insert(temp);
 //     }
+}
+ 
+// if(temp==tempa){
+//     cout<<"\n\ntempa is temp\n\n";
+    
 // }
-// else if(albumred && temp==tempa){
-//     albumred=false;
-//     continue;
+// else{
+//     cout<<"\n\ntempa is NOT temp\n\n";
 // }
-// }
+//  if(albumred){
+//     cout<<"\n\nalbum is read\n\n";
+
+//  }
+//  else{
+//     cout<<"\n\nalbum is NOT read\n\n";
+//  }
+ }
+s.close();
     return library;
 }
-int countUniqueArtists( musicl music) {
-    std::set<std::string> uniqueArtists;
-    for (const auto& album : music.album) {
-        const auto& albumArtists = music.artist.at(album);
-        for (const auto& artist : albumArtists) {
-            uniqueArtists.insert(artist);
-        }
-    }
-    return uniqueArtists.size();
-}
+// int countUniqueArtists( musicl music) {
+//     set<string> uniqueArtists;
+//     for (const auto& album : music.album) {
+//         const auto& albumArtists = music.artist.at(album);
+//         for (const auto& artist : albumArtists) {
+//             uniqueArtists.insert(artist);
+//         }
+//     }
+//     return uniqueArtists.size();
+//}
 
-void stats (musicl library){
+void stats (string extra, map <string, musicl> library){
 cout<<"Overall Music Library Stats"<<endl<<"===========================\nTotal Records: ";
-cout<<library.album.size()<<endl;
+cout<<library.size()<<endl;
 set <string> art;
 set <string> song; 
 set <string> temp;
-int asize=0;
+int ssize=0;
+
+for(const auto name: library){
+art.insert(name.second.artist.begin(),name.second.artist.end());
+ssize+=name.second.song.size();
+}
+cout<<"Total Unique Artists: "<<art.size()<<endl;
+cout<<"Total Songs: "<<ssize<<endl<<endl;
+
+if(extra=="-d"){
+    cout<<"Your Current Music Library Includes\n===================================\n";
+    for(const auto name: library){
+    cout<<name.second.album<<endl;
+    for(const auto person : name.second.artist){
+        cout<<" "<<person<<endl;
+        
+    }
+    for(const auto song: name.second.song){
+        cout<<"   "<<song<<endl;
+    }
+    }
+cout<<endl;
+}
+
+
 /*
 for( auto ill: library.album){
 
@@ -129,11 +184,157 @@ temp=it[ill].second;
 
 
 */
-cout<<"Total Unique Artists: "<<(countUniqueArtists(library));
+//cout<<"Total Unique Artists: "<<(countUniqueArtists(library));
+}
+map <string,musicl> clear(map<string,musicl> library){
+    library.clear();
+return library;
+}
+void search(string com, map <string,musicl> library ){
+string type;
+set <string> place;
+string temp;
+string temp1;
+string tname;
+string tname2;
+string tempsym;
+set <string> nset;
+set<settle> sset;
+settle tem;
+
+splitFirstWord(com,type,temp);
+if(temp==""){
+cout<<"Error: Search terms cannot be empty.\nNo results found.\n\n";
+return;
+}
+//cout<<"\n\ntype "<<type<<"\n\n";
+while(true){
+//cout<<"\n\n temp: "<<temp<<"\n\ntemp1: "<<temp1;
+tem.m=false;
+tem.p=false;
+if(temp==""){
+//cout<<"this worked"<<i;
+break;
+}
+    splitFirstWord(temp,temp1,temp);
+place.insert(temp1);
+//  if(!100>temp1.find('+')){
+//     tem.lost=(temp1);
+//     tem.p=true;
+
+// }
+//  if(!100>temp1.find('+')){
+//     tem.lost=(temp1);
+//     tem.m=true;
+// }
+// sset.insert(tem);
+}
+// for( auto& palace : sset){
+//     for( auto name: library){
+//             tname=(name.first);
+//             tolower(tname);
+
+//             if(100>tname.find(palace.lost)){
+//                 const_cast<string&>(palace.found)=name.second.album;
+//             }
+//         }
+
+// }
 
 
+
+if(type=="album"){
+    if(!isalnum(tempsym.at(0))){
+           
+    }
+    for(const auto look : place){
+        for( const auto name: library){
+            tname=(name.first);
+            tolower(tname);
+
+            if(100>tname.find(look)){
+                nset.insert(name.first);
+                //cout<<"\n\nlook: "<<look<<"\n\ntname: "<<tname;
+
+                
+            }
+        }
+    }
+                cout<<"Your search results exist in the following albums: "<<endl;
+                for (const auto lol : nset){
+                    cout<<lol<<endl;
+                }
+                cout<<endl;
+}
+if(type=="artist"){
+    for(const auto look : place){
+        for( const auto name: library){
+            for(const auto person : name.second.artist){
+
+            tname=(person);
+            tolower(tname);
+
+            if(100>tname.find(look)){
+                nset.insert(name.first);
+                //cout<<"\n\nlook: "<<look<<"\n\ntname: "<<tname;
+            }
+                } }    }
+                cout<<"Your search results exist in the following albums: "<<endl;
+                for (const auto lol : nset){
+                    cout<<lol<<endl;
+                }
+                cout<<endl;
+}
+if(type=="song"){
+    for(const auto look : place){
+        for( const auto name: library){
+            for(const auto music : name.second.song){
+
+            tname=(music);
+            tolower(tname);
+
+            if(100>tname.find(look)){
+                nset.insert(name.first);
+                //cout<<"\n\nlook: "<<look<<"\n\ntname: "<<tname;
+            }
+                } }    }
+                cout<<"Your search results exist in the following albums: "<<endl;
+                for (const auto lol : nset){
+                    cout<<lol<<endl;
+                }
+                cout<<endl;
+}
 
 }
+void exports(map <string, musicl> library, string remains){
+ofstream output;
+bool notfirst=false;
+if(remains==""){
+ output.open("musicdatabase.txt");
+}
+else{
+     output.open(remains);
+}
+for(const auto name: library){
+    if(notfirst){
+        output<<endl;
+    }
+    output<<name.second.album<<endl;
+    for(const auto person : name.second.artist){
+        output<<person<<endl;
+        
+    }
+    for(const auto song: name.second.song){
+        output<<song<<endl;
+    }
+    output<<name.first;
+    notfirst=true;
+    }
+output<<endl;
+output.close();
+return;
+}
+
 int main()
 {
     string userEntry;
@@ -164,10 +365,13 @@ int main()
         }
         else if (command == "clear")
         {
+            lib=clear(lib);
             // TODO
         }
         else if (command == "export")
         {
+            exports(lib, remains);
+        
             // TODO
         }
         else if (command == "load")
@@ -177,11 +381,12 @@ int main()
         }
         else if (command == "stats")
         {
-            stats(lib);
+            stats(remains,lib);
             // TODO
         }          
         else if (command == "search")
         {
+         search(remains,lib);
             // TODO
         }
 
