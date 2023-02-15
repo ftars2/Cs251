@@ -6,6 +6,10 @@
         "utility": "cpp",
         "ostream": "cpp",
         "map": "cpp",
-        "algorithm": "cpp"
+        "algorithm": "cpp",
+        "initializer_list": "cpp",
+        "xutility": "cpp",
+        "iostream": "cpp",
+        "iterator": "cpp"
     }
 }
