@@ -9,6 +9,8 @@
         "limits": "cpp",
         "iomanip": "cpp",
         "xtree": "cpp",
-        "utility": "cpp"
+        "utility": "cpp",
+        "set": "cpp",
+        "map": "cpp"
     }
 }
