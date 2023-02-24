@@ -101,10 +101,27 @@ public:
       throw invalid_argument("mymatrix::constructor: # of rows");
     if (C < 1)
       throw invalid_argument("mymatrix::constructor: # of cols");
+      {
+        Rows = new ROW[R];  // an array with R ROW structs:
+    NumRows = R;
+
+    // initialize each row to have C columns:
+    for (int r = 0; r < NumRows; ++r)
+    {
+      Rows[r].Cols = new T[C];  // an array with C elements of type T:
+      Rows[r].NumCols = C;
+
+      // initialize the elements to their default value:
+      for (int c = 0; c < Rows[r].NumCols; ++c)
+      {
+        Rows[r].Cols[c] = T{};  // default value for type T:
+
 
     //
     // TODO
     //
+      }}}
+
   }
 
 
@@ -379,4 +396,5 @@ public:
     }
   }
 
-};
+}
+;
