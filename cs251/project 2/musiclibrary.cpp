@@ -70,7 +70,7 @@ if(!albumred){//if the albums name hasnt been read in yet
      talbum.artist.clear();//clears temp musicl
     talbum.song.clear();
  }
- else if(!isdigit(temp.at(0))){//if first char of temp is not a number then it is a artust 
+ else if(!isdigit(temp.at(0))){//if first char of temp is not a number  then it is a artust 
 talbum.artist.insert(temp);
  }
 
