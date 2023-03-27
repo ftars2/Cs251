@@ -9,9 +9,9 @@ using namespace std;
 
 int main()
 {
-	// CanvasList myCanvas;
-	// cout << "List size: " << myCanvas.size() << endl;
-	// cout << "Front: " << myCanvas.front() << endl;
+	 CanvasList myCanvas;
+	 cout<< "List size: " << myCanvas.size() << endl;
+	 cout<< "Front: " << myCanvas.front() << endl;
 
 	// cout << endl << endl << "Adding Shape to the front" << endl;
 	// Shape *s = new Shape(1, 3);

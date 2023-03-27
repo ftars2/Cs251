@@ -1,3 +1,4 @@
+#include "iostream"
 #pragma once
 
 using namespace std;
@@ -44,10 +45,15 @@ void Shape:: setY(int a){
     y=a;
 }
  Shape:: ~Shape(){
-    delete this;
+
+    //destructor
 }
 Shape* Shape:: copy(){
-   s= new Shape();
+   Shape* s= new Shape(x,y);
+   return s;
+}
+void Shape::printShape() const{
+    cout<<"It's a Shape at x: "<<this->getX()<<", y: "<<this->getY()<<endl;
 }
 
 class Circle : public Shape 
@@ -91,6 +97,53 @@ class Rectangle : public Shape
         
         virtual void printShape() const;
 };
+
+Rectangle::Rectangle(){
+    width=0;
+    height=0;
+    x=0;
+    y=0;
+
+}
+
+Rectangle::Rectangle(int w, int h){
+    width=w;
+    height=h;
+    x=0;
+    y=0;
+}
+Rectangle::Rectangle(int x, int y, int w, int h){
+    width=w;
+    height=h;
+    this->x=x;
+    this->y=y;
+}
+Rectangle::~Rectangle(){
+}
+Rectangle* Rectangle::copy(){
+    Rectangle* rect=new Rectangle;
+    rect->width=this->width;
+    rect->height=this->height;
+    rect->x=this->x;
+    rect->y=this->y;
+    return rect;
+}
+int Rectangle::getWidth() const{
+return this->width;
+}
+int Rectangle::getHeight() const{
+return this->height;
+}
+void Rectangle::setWidth(int wid){
+this->width=wid;
+}
+void Rectangle::setHeight(int hei){
+this->height=hei;
+}
+void Rectangle::printShape()const{
+    cout<<"It's a Rectangle at x: "<<this->x<<", y: "<<this->y<<"with width: "<<width<<" and height: "<<height<<endl;
+}
+
 
 class RightTriangle : public Shape 
 {
