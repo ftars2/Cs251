@@ -74,6 +74,37 @@ class Circle : public Shape
         
         virtual void printShape() const;
 };
+Circle::Circle(){
+    radius=0;
+    x=0;
+    y=0;
+}
+Circle::Circle(int r){
+    radius=r;
+    x=0;
+    y=0;
+}
+Circle::Circle(int x, int y,int r){
+    radius=r;
+    this->x=x;
+    this->y=y;
+}
+Circle::~Circle(){
+    //destructor
+}
+Circle* Circle::copy(){
+ Circle* C= new Circle(x,y,radius);
+ return C;   
+}
+int Circle::getRadius()const{
+    return radius;
+}
+void Circle::setRadius(int rad){
+    radius=rad;
+}
+void Circle::printShape()const{
+    cout<<"It's a Circle at x: "<<x<<", y: "<<y<<", radius: "<<radius<<endl;
+}
 
 
 class Rectangle : public Shape 
@@ -166,3 +197,44 @@ class RightTriangle : public Shape
 
         virtual void printShape() const;
 };
+RightTriangle::RightTriangle(){
+    x=0;
+    y=0;
+    base=0;
+    height=0;
+}
+RightTriangle::RightTriangle(int b,int h){
+    x=0;
+    y=0;
+    base=b;
+    height=h;
+}
+RightTriangle::RightTriangle(int x, int y, int b,int h){
+    this->x=x;
+    this->y=y;
+    base=b;
+    height=h;
+}
+RightTriangle::~RightTriangle(){
+//destructor
+}
+RightTriangle* RightTriangle::copy(){
+RightTriangle* R=new RightTriangle(x,y,base,height);
+return R;
+}
+
+int RightTriangle::getBase() const{
+return base;
+}
+int RightTriangle::getHeight() const{
+return height;
+}
+void RightTriangle::setBase(int b){
+base=b;
+}
+void RightTriangle::setHeight(int h){
+height=h;
+}
+ void RightTriangle::printShape() const{
+cout<<"It's a Right Triangle at x: "<<x<<", y: "<<y<<" with base: "<<base<<" and height: "<<height<<endl;
+ }
