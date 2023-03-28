@@ -172,7 +172,7 @@ void Rectangle::setHeight(int hei){
 this->height=hei;
 }
 void Rectangle::printShape()const{
-    cout<<"It's a Rectangle at x: "<<this->x<<", y: "<<this->y<<"with width: "<<width<<" and height: "<<height<<endl;
+    cout<<"It's a Rectangle at x: "<<this->x<<", y: "<<this->y<<" with width: "<<width<<" and height: "<<height<<endl;
 }
 
 

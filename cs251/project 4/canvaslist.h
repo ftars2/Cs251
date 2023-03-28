@@ -97,7 +97,7 @@ void CanvasList::insertAfter(int index, Shape *shape)
         curnode = curnode->next;
     }
     ShapeNode *newnode = new ShapeNode;
-    newnode->value = shape->copy();
+    newnode->value = shape;
     newnode->next = curnode->next;
     curnode->next = newnode;
     listSize++;
@@ -105,14 +105,14 @@ void CanvasList::insertAfter(int index, Shape *shape)
 void CanvasList::push_front(Shape *shape)
 {
     ShapeNode *newnode = new ShapeNode;
-    newnode->value = shape->copy();
+    newnode->value = shape;
     newnode->next = listFront;
     listFront = newnode;
     listSize++;
 }
 void CanvasList::push_back(Shape *shape){
     ShapeNode *newnode= new ShapeNode;
-    newnode->value=shape->copy();
+    newnode->value=shape;
     newnode->next=nullptr;
     if(listFront==nullptr){
         listFront=newnode;
@@ -165,18 +165,22 @@ Shape* CanvasList::pop_back(){
     if(listFront==nullptr){
         return nullptr;
     }
-    ShapeNode* curnode=listFront;
+    ShapeNode* curnode = listFront;
+    if(curnode->next == nullptr){
+        Shape *temp = curnode->value;
+        delete curnode;
+        listFront = nullptr;
+        listSize--;
+        return temp;
+    }
     while(curnode->next->next!=nullptr){
         curnode=curnode->next;
     }  
     Shape *temp=curnode->next->value;
     ShapeNode *temp1=curnode->next;
     curnode->next=nullptr;
-delete temp1;
-listSize--;
-if(listSize==0){
-    listFront=nullptr;
-}
+    delete temp1;
+    listSize--;
     return temp;
 }
 ShapeNode* CanvasList::front() const{
@@ -208,13 +212,14 @@ int CanvasList::find(int x, int y) const{
     return -1;
 }
 Shape* CanvasList::shapeAt(int ind) const{
-if(ind<0||ind>listSize){
+if(ind<0||ind>=listSize){
     return nullptr;
 }
 int i=0;
 ShapeNode* curnode=listFront;
 while(i!=ind){
     curnode=curnode->next;
+    i++;
 }
 return curnode->value;
 }
@@ -228,7 +233,7 @@ void CanvasList::draw() const{
 void CanvasList::printAddresses() const{
     ShapeNode* curnode=listFront;
     while(curnode!=nullptr){
-        cout<<"Node Address: "<<&curnode<<"  Shape Address: "<<&curnode->value<<endl;
-
+        cout<<"Node Address: "<<curnode<<"  Shape Address: "<<curnode->value<<endl;
+        curnode=curnode->next;
     }
 }
