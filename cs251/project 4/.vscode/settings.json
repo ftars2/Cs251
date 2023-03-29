@@ -9,6 +9,9 @@
         "initializer_list": "cpp",
         "regex": "cpp",
         "utility": "cpp",
-        "ostream": "cpp"
+        "ostream": "cpp",
+        "iostream": "cpp",
+        "sstream": "cpp",
+        "*.tcc": "cpp"
     }
 }
