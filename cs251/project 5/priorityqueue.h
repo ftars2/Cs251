@@ -38,7 +38,9 @@ public:
     // O(1)
     //
     priorityqueue() {
-        
+        root=nullptr;
+        size=0;
+        curr=nullptr;
         // TO DO: write this function.
         
         
@@ -52,7 +54,9 @@ public:
     // O(n), where n is total number of nodes in custom BST
     //
     priorityqueue& operator=(const priorityqueue& other) {
-        
+        this->root=other.root;
+        this->curr=other.curr;
+        this->size=other.size;
         
         // TO DO: write this function.
         return *this;
@@ -67,11 +71,12 @@ public:
     // O(n), where n is total number of nodes in custom BST
     //
     void clear() {
-        
-        
+        clearhelp(root);
         // TO DO: write this function.
         
-        
+        root=nullptr;
+        size=0;
+        curr=nullptr;
     }
     
     //
@@ -81,7 +86,7 @@ public:
     // O(n), where n is total number of nodes in custom BST
     //
     ~priorityqueue() {
-        
+        clearhelp(root);
         
         // TO DO: write this function.
         
@@ -97,11 +102,51 @@ public:
     // of duplicate priorities
     //
     void enqueue(T value, int priority) {
-        
-        
+        NODE* newn= new NODE;
+        newn->dup=false;
+        newn->priority=priority;
+        newn->value=value;
+        newn->left = nullptr;
+        newn->right = nullptr;
+        newn->link = nullptr;
+        if(root==nullptr){
+            root=newn;
+            newn->parent=nullptr;
+            size++;
+        }
+        else {
+        NODE* curr = root;
+        NODE* parent = nullptr;
+
+        while (curr != nullptr) {
+            parent = curr;
+            if (priority < curr->priority){
+                curr = curr->left;
+            }
+            else if (priority > curr->priority){
+                curr = curr->right;
+            }
+            else if(priority == curr->priority) {
+                // Duplicate priority found, insert newn into linked list
+                newn->link = curr->link;
+                curr->link = newn;
+                newn->dup = true;
+                size++;
+                return;
+            }
+        }
+
+        newn->parent = parent;//inserts a new node if no matching node is found
+
+        if (priority < parent->priority){
+            parent->left = newn;
+        }
+        else{
+            parent->right = newn;
+        }
+    size++;
+    }
         // TO DO: write this function.
-        
-        
     }
     //
     // dequeue:
@@ -111,15 +156,40 @@ public:
     // O(logn + m), where n is number of unique nodes in tree and m is number 
     // of duplicate priorities
     //
-    T dequeue() {
-        
-        
-        // TO DO: write this function.
-        T valueOut;
-        return valueOut; // TO DO: update this return
-        
-        
+T dequeue() {
+    if (root == nullptr) {
+        return -1;
     }
+
+    if (size == 1) {
+        T valueOut = root->value;
+        delete root;
+        root = nullptr;
+        size--;
+        return valueOut;
+    }
+
+    NODE* curr = root;
+    while (curr->left != nullptr) {
+        curr = curr->left;
+    }
+
+    T valueOut = curr->value;
+    if (curr == root) {
+        root = curr->right;
+    }
+    else {
+        curr->parent->left = curr->right;
+    }
+    
+    if (curr->right != nullptr) {
+        curr->right->parent = curr->parent;
+    }
+
+    delete curr;
+    size--;
+    return valueOut;
+}
     
     //
     // Size:
@@ -130,7 +200,7 @@ public:
     int Size() {
         
         
-        return 0; // TO DO: update this return
+        return this->size; // TO DO: update this return
         
         
     }
@@ -199,6 +269,7 @@ public:
     //  3 value: Gwen"
     //
     string toString() {
+        NODE* cnode=root;
         
         
         // TO DO: write this function.
@@ -251,4 +322,19 @@ public:
     void* getRoot() {
         return root;
     }
+private:
+
+void clearhelp(NODE* stem){
+    if(stem==nullptr){
+        return;
+    }
+    if(stem->left!=nullptr){
+        clearhelp(stem->left);
+}
+    if(stem->right!=nullptr){
+        clearhelp(stem->right);
+}
+delete stem;
+}
+
 };
