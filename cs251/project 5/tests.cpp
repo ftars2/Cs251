@@ -85,7 +85,14 @@ TEST_CASE("(3) check if size works correctly")
     empty.enqueue(1,1);
     REQUIRE(empty.Size()==2);
 }
-
+TEST_CASE("(4) to string function"){
+        priorityqueue <string> empty;
+        empty.enqueue("hello",1);
+        empty.enqueue("hope",3);
+        empty.enqueue("i",2);
+        empty.enqueue("you have a great day",4);
+        
+} 
 
 
 

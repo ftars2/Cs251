@@ -222,7 +222,7 @@ T dequeue() {
     //    }
     //    cout << priority << " value: " << value << endl;
     void begin() {
-        
+        curr=root;
         
         // TO DO: write this function.
         
@@ -270,11 +270,14 @@ T dequeue() {
     //
     string toString() {
         NODE* cnode=root;
-        
-        
+        stringstream output;
+        streambuf* oldcout=cout.rdbuf(output.rdbuf());
+    
+        stringhelp(cnode);
+         cout.rdbuf(oldcout);
         // TO DO: write this function.
         string str = "";
-        return str; // TO DO: update this return
+        return output.str(); // TO DO: update this return
         
         
     }
@@ -335,6 +338,13 @@ void clearhelp(NODE* stem){
         clearhelp(stem->right);
 }
 delete stem;
+}
+void stringhelp(NODE* rot){
+    if(rot!=nullptr){
+        stringhelp(rot->left);
+        cout<<rot->priority <<" value: "<<rot->value>>endl;
+      stringhelp(rot->right);
+   }    
 }
 
 };

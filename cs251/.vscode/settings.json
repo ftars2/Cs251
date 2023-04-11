@@ -12,6 +12,7 @@
         "utility": "cpp",
         "set": "cpp",
         "map": "cpp",
-        "stdexcept": "cpp"
+        "stdexcept": "cpp",
+        "*.tcc": "cpp"
     }
 }
