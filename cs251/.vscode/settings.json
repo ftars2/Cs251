@@ -13,6 +13,7 @@
         "set": "cpp",
         "map": "cpp",
         "stdexcept": "cpp",
-        "*.tcc": "cpp"
+        "*.tcc": "cpp",
+        "sstream": "cpp"
     }
 }

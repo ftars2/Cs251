@@ -223,7 +223,9 @@ T dequeue() {
     //    cout << priority << " value: " << value << endl;
     void begin() {
         curr=root;
-        
+        while (curr != nullptr && curr->left != nullptr) {
+        curr = curr->left;
+        }
         // TO DO: write this function.
         
         
@@ -251,7 +253,11 @@ T dequeue() {
     //    cout << priority << " value: " << value << endl;
     //
     bool next(T& value, int &priority) {
+if(curr->left!=nullptr){
+    if(curr->left->priroity>curr->priority){
         
+    }
+}        
         
         // TO DO: write this function.
         return true; // TO DO: update this return
@@ -276,8 +282,8 @@ T dequeue() {
         stringhelp(cnode);
          cout.rdbuf(oldcout);
         // TO DO: write this function.
-        string str = "";
-        return output.str(); // TO DO: update this return
+        string str =output.str();
+        return str; // TO DO: update this return
         
         
     }
@@ -342,7 +348,7 @@ delete stem;
 void stringhelp(NODE* rot){
     if(rot!=nullptr){
         stringhelp(rot->left);
-        cout<<rot->priority <<" value: "<<rot->value>>endl;
+        cout<<rot->priority <<" value: "<<rot->value<<endl;
       stringhelp(rot->right);
    }    
 }
