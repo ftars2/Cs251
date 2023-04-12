@@ -10,8 +10,8 @@ runtest:
 	./tests.exe
 
 clean:
-	rm -f program.exe
+	rm -f main.exe
 	rm -f tests.exe
 
 valgrind:
-	valgrind --tool=memcheck --leak-check=yes ./program.exe
+	valgrind --tool=memcheck --leak-check=yes ./main.cpp

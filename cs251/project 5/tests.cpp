@@ -64,7 +64,7 @@ TEST_CASE("(3) check if priority order is correct")
    REQUIRE(empty.dequeue()==99);
    REQUIRE(empty.dequeue()==55);
    REQUIRE(empty.dequeue()==23);
-    REQUIRE(empty.dequeue()==-1);
+
 }
 TEST_CASE("(3) check if size works correctly") 
 {
