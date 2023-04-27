@@ -13,13 +13,13 @@
 // Joe Hummel, PhD
 // University of Illinois at Chicago
 //
-
 #pragma once
 
 #include <iostream>
 #include <stdexcept>
 #include <vector>
 #include <set>
+#include <map>
 
 using namespace std;
 
@@ -27,45 +27,16 @@ template<typename VertexT, typename WeightT>
 class graph {
  private:
   struct EdgeData {
-    bool     EdgeExists;
-    WeightT  Weight;
+    bool EdgeExists;
+    WeightT Weight;
 
     EdgeData() {
-      EdgeExists = false;  // initially no edge, and no weight
+      EdgeExists = false;
     }
   };
 
-  //
-  // We are using adjacency matrix implementation, where rows
-  // are the starting vertex and cols are the ending vertex.
-  // We keep track of the vertices in the Vertices vector,
-  // where the vertex's position in the vector --- 0, 1, 2,
-  // 3, 4, 5, ... --- denotes the row in the adjacency matrix
-  // where their edges are found.  Example: if vertex "ORD" is
-  // in position 1 of the Vertices vector, then row 1 of
-  // AdjMatrix are the edges that start at "ORD" and lead to
-  // other vertices.
-  //
-  static constexpr int MatrixSize = 100;
-
-  EdgeData         AdjMatrix[MatrixSize][MatrixSize];
-  vector<VertexT>  Vertices;
-
-  //
-  // _LookupVertex
-  //
-  // Finds the vertex in the Vertices vector and returns it's
-  // index position if found, otherwise returns -1.
-  //
-  int _LookupVertex(VertexT v) const {
-    for (int i = 0; i < this->NumVertices(); ++i) {
-      if (this->Vertices[i] == v)  // already in the graph:
-        return i;
-    }
-
-    // if get here, not found:
-    return -1;
-  }
+  map<VertexT, set<pair<VertexT, WeightT>>> AdjList; // adjacency list
+  set<VertexT> Vertices; // set of all vertices
 
  public:
   //
@@ -74,16 +45,7 @@ class graph {
   // Constructs an empty graph where n is the max # of vertices
   // you expect the graph to contain.
   //
-  // NOTE: the graph is implemented using an adjacency matrix.
-  // If n exceeds the dimensions of this matrix, an exception
-  // will be thrown to let you know that this implementation
-  // will not suffice.
-  //
-  graph(int n) {
-    if (n > MatrixSize) {
-      throw runtime_error("graph::constructor: n exceeds internal matrix size");
-    }
-  }
+  graph(int n) {}
 
   //
   // NumVertices
@@ -103,15 +65,11 @@ class graph {
     int count = 0;
 
     //
-    // loop through the adjacency matrix and count how many
+    // loop through the adjacency list and count how many
     // edges currently exist:
     //
-    for (int row = 0; row < this->NumVertices(); ++row) {
-      for (int col = 0; col < this->NumVertices(); ++col) {
-        if (this->AdjMatrix[row][col].EdgeExists) {
-          count++;
-        }
-      }
+    for (const auto& vertex : this->Vertices) {
+      count += static_cast<int>(this->AdjList[vertex].size());
     }
     return count;
   }
@@ -120,29 +78,19 @@ class graph {
   // addVertex
   //
   // Adds the vertex v to the graph if there's room, and if so
-  // returns true.  If the graph is full, or the vertex already
-  // exists in the graph, then false is returned.
+  // returns true.  If the vertex already exists in the graph, then
+  // false is returned.
   //
   bool addVertex(VertexT v) {
-    if (this->NumVertices() > MatrixSize) {  // we're full:
+    if (this->Vertices.count(v) > 0) {  // vertex already exists:
       return false;
     }
 
     //
-    // is the vertex already in the graph?  If so, we do not
-    // insert again otherwise Vertices may fill with duplicates:
+    // if we get here, vertex does not exist so insert into the
+    // set of vertices:
     //
-    if (_LookupVertex(v) >= 0) {
-      return false;
-    }
-
-    //
-    // if we get here, vertex does not exist so insert.  Where
-    // we insert becomes the rows and col position for this
-    // vertex in the adjacency matrix.
-    //
-    this->Vertices.push_back(v);
-
+    this->Vertices.insert(v);
     return true;
   }
 
@@ -150,39 +98,29 @@ class graph {
   // addEdge
   //
   // Adds the edge (from, to, weight) to the graph, and returns
-  // true.  If the vertices do not exist or for some reason the
-  // graph is full, false is returned.
+  // true.  If the vertices do not exist, false is returned.
   //
   // NOTE: if the edge already exists, the existing edge weight
   // is overwritten with the new edge weight.
   //
   bool addEdge(VertexT from, VertexT to, WeightT weight) {
     //
-    // we need to search the Vertices and find the position
-    // of each vertex; this will denote the row and col to
-    // access in the adjacency matrix:
+    // check that both vertices exist:
     //
-    int row = _LookupVertex(from);
-
-    if (row < 0) {  // not found:
-      return false;
-    }
-
-    int col = _LookupVertex(to);
-
-    if (col < 0) {  // not found:
+    if (this->Vertices.count(from) == 0 || this->Vertices.count(to) == 0) {
       return false;
     }
 
     //
-    // the vertices exist and we have the row and col of the
-    // adjacency matrix, so insert / update the edge:
+    // add the edge to the adjacency list, overwriting any existing
+    // edge weight:
     //
-    this->AdjMatrix[row][col].EdgeExists = true;
-    this->AdjMatrix[row][col].Weight = weight;
+    this->AdjList[from].insert(make_pair(to, weight));
 
     return true;
   }
+
+
 
   //
   // getWeight
@@ -193,39 +131,21 @@ class graph {
   // exist, the weight parameter is unchanged and false is
   // returned.
   //
-  bool getWeight(VertexT from, VertexT to, WeightT& weight) const {
-    //
-    // we need to search the Vertices and find the position
-    // of each vertex; this will denote the row and col to
-    // access in the adjacency matrix:
-    //
-    int row = _LookupVertex(from);
-
-    if (row < 0) {  // not found:
-      return false;
-    }
-
-    int col = _LookupVertex(to);
-
-    if (col < 0) {  // not found:
-      return false;
-    }
-
-    //
-    // the vertices exist, but does the edge exist?
-    //
-    if (!this->AdjMatrix[row][col].EdgeExists) {  // no:
-      return false;
-    }
-
-    //
-    // Okay, the edge exists, return the weight via the
-    // reference parameter:
-    //
-    weight = this->AdjMatrix[row][col].Weight;
-
-    return true;
+bool getWeight(VertexT from, VertexT to, WeightT& weight) const {
+  auto fromIter = AdjList.find(from);
+  if (fromIter == AdjList.end()) {
+    return false;  // "from" vertex not found
   }
+
+  auto toIter = fromIter->second.find({to, WeightT{}});
+  if (toIter == fromIter->second.end()) {
+    return false;  // edge not found
+  }
+
+  weight = toIter->second;
+  return true;
+}
+
 
   //
   // neighbors
@@ -235,34 +155,27 @@ class graph {
   // Since a set is returned, the neighbors are returned in
   // sorted order; use foreach to iterate through the set.
   //
-  set<VertexT> neighbors(VertexT v) const {
-    set<VertexT>  S;
+set<VertexT> neighbors(VertexT v) const {
+  set<VertexT> S;
 
-    //
-    // we need to search the Vertices and find the position
-    // of v, that will be the row we need in the adjacency
-    // matrix:
-    //
-    int row = _LookupVertex(v);
-
-    if (row < 0) {  // not found:
-      return S;
-    }
-
-    //
-    // we found the row, so loop along the row and for every
-    // edge that exists, add the column vertex to V:
-    //
-    // NOTE: how many columns are there?  The # of vertices.
-    //
-    for (int col = 0; col < this->NumVertices(); ++col) {
-      if (this->AdjMatrix[row][col].EdgeExists) {
-        VertexT dest = this->Vertices[col];  // dest vertex is here:
-        S.insert(dest);
-      }
-    }
+  auto itr = Vertices.find(v);
+  if (itr == Vertices.end()) { // not found
     return S;
   }
+
+  int row = itr->second; // found
+
+  // loop over the adjacency list for the vertex and add vertices to S if the edge has v as its source vertex
+  for (const auto& edge : AdjList[row]) {
+    S.insert(edge.To);
+  }
+
+  return S;
+}
+
+
+
+
 
   //
   // getVertices
@@ -284,7 +197,7 @@ class graph {
   //    ...
   //    G.dump(cout);  // dump to console
   //
-  void dump(ostream& output) const {
+void dump(ostream& output) const {
     output << "***************************************************" << endl;
     output << "********************* GRAPH ***********************" << endl;
 
@@ -293,26 +206,26 @@ class graph {
 
     output << endl;
     output << "**Vertices:" << endl;
-    for (int i = 0; i < this->NumVertices(); ++i) {
-      output << " " << i << ". " << this->Vertices[i] << endl;
+    for (const auto& v : this->Vertices) {
+        output << " " << v << endl;
     }
 
     output << endl;
     output << "**Edges:" << endl;
-    for (int row = 0; row < this->NumVertices(); ++row) {
-      output << " row " << row << ": ";
-
-      for (int col = 0; col < this->NumVertices(); ++col) {
-        if (this->AdjMatrix[row][col].EdgeExists == false) {
-          output << "F ";
-        } else {
-          output << "(T,"
-            << this->AdjMatrix[row][col].Weight
-            << ") ";
+    for (const auto& kv : this->AdjList) {
+        const auto& v = kv.first;
+        const auto& adj = kv.second;
+        output << " " << v << ": ";
+        for (const auto& kv2 : adj) {
+            const auto& u = kv2.first;
+            const auto& weight = kv2.second;
+            output << "(" << u << ", " << weight << ") ";
         }
-      }
-      output << endl;
+        output << endl;
     }
     output << "**************************************************" << endl;
-  }
+}
+
+
+
 };
