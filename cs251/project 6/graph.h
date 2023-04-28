@@ -28,10 +28,12 @@ class graph {
  private:
   struct EdgeData {
     bool EdgeExists;
+    bool isEmpty;
     WeightT Weight;
 
     EdgeData() {
       EdgeExists = false;
+      isEmpty = true; // Initialize to true
     }
   };
 
@@ -45,6 +47,10 @@ class graph {
   // Constructs an empty graph where n is the max # of vertices
   // you expect the graph to contain.
   //
+  graph() {
+    
+  }
+
   graph(int n) {}
 
   //
@@ -61,18 +67,16 @@ class graph {
   //
   // Returns the # of edges currently in the graph.
   //
-  int NumEdges() const {
+  int NumEdges() const
+{
     int count = 0;
-
-    //
-    // loop through the adjacency list and count how many
-    // edges currently exist:
-    //
-    for (const auto& vertex : this->Vertices) {
-      count += static_cast<int>(this->AdjList[vertex].size());
+    for (auto v : AdjList)
+    {
+        count += static_cast<int>(v.second.size());
     }
     return count;
-  }
+}
+
 
   //
   // addVertex
@@ -156,22 +160,20 @@ bool getWeight(VertexT from, VertexT to, WeightT& weight) const {
   // sorted order; use foreach to iterate through the set.
   //
 set<VertexT> neighbors(VertexT v) const {
-  set<VertexT> S;
+    set<VertexT> S;
 
-  auto itr = Vertices.find(v);
-  if (itr == Vertices.end()) { // not found
+    auto itr = AdjList.find(v);
+    if (itr == AdjList.end()) { // not found
+      return S;
+    }
+
+    // loop over the adjacency list for the vertex and add vertices to S if the edge has v as its source vertex
+    for (const auto& adj : itr->second) {
+      S.insert(adj.first);
+    }
+
     return S;
   }
-
-  int row = itr->second; // found
-
-  // loop over the adjacency list for the vertex and add vertices to S if the edge has v as its source vertex
-  for (const auto& edge : AdjList[row]) {
-    S.insert(edge.To);
-  }
-
-  return S;
-}
 
 
 
@@ -183,9 +185,16 @@ set<VertexT> neighbors(VertexT v) const {
   // Returns a vector containing all the vertices currently in
   // the graph.
   //
-  vector<VertexT> getVertices() const {
-    return this->Vertices;  // returns a copy:
-  }
+vector<VertexT> getVertices() const
+{
+    vector<VertexT> vertices;
+    for (auto v : Vertices)
+    {
+        vertices.push_back(v);
+    }
+    return vertices;
+}
+
 
   //
   // dump
@@ -203,28 +212,47 @@ void dump(ostream& output) const {
 
     output << "**Num vertices: " << this->NumVertices() << endl;
     output << "**Num edges: " << this->NumEdges() << endl;
-
+    int count=0;
     output << endl;
     output << "**Vertices:" << endl;
     for (const auto& v : this->Vertices) {
-        output << " " << v << endl;
+        output << count<< ". " << v << endl;
+        count++;
     }
 
     output << endl;
     output << "**Edges:" << endl;
+    count=0;
+    int con=this->Vertices.size();
     for (const auto& kv : this->AdjList) {
         const auto& v = kv.first;
         const auto& adj = kv.second;
-        output << " " << v << ": ";
-        for (const auto& kv2 : adj) {
-            const auto& u = kv2.first;
-            const auto& weight = kv2.second;
-            output << "(" << u << ", " << weight << ") ";
+        output << "row " << count << ": ";
+        int co=0;
+
+        for (const auto& vertex : this->Vertices) {
+            bool printed = false;
+            for (const auto& kv2 : adj) {
+                const auto& u = kv2.first;
+                const auto& weight = kv2.second;
+                if (vertex == u) {
+                    output << "(T, " << weight << ") ";
+                    printed = true;
+                    break;
+                }
+            }
+            if (!printed) {
+                output << "F ";
+            }
+            co++;
         }
         output << endl;
+        count++;
     }
     output << "**************************************************" << endl;
 }
+
+
 
 
 
