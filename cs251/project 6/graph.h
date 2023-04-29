@@ -1,5 +1,5 @@
 // graph.h <Starter Code>
-// < Your name >
+// < Frank Tarshis>
 //
 // Basic graph class using adjacency matrix representation.  Currently
 // limited to a graph with at most 100 vertices.
@@ -22,20 +22,14 @@
 #include <map>
 
 using namespace std;
-
+/// @brief graph class
+/// @tparam VertexT template variable  
+/// @tparam WeightT template variable
 template<typename VertexT, typename WeightT>
 class graph {
  private:
-  struct EdgeData {
-    bool EdgeExists;
-    bool isEmpty;
-    WeightT Weight;
-
-    EdgeData() {
-      EdgeExists = false;
-      isEmpty = true; // Initialize to true
-    }
-  };
+ 
+  
 
   map<VertexT, set<pair<VertexT, WeightT>>> AdjList; // adjacency list
   set<VertexT> Vertices; // set of all vertices
@@ -141,7 +135,7 @@ bool getWeight(VertexT from, VertexT to, WeightT& weight) const {
     return false;  // "from" vertex not found
   }
 
-  auto toIter = fromIter->second.find({to, WeightT{}});
+  auto toIter = fromIter->second.find({to, weight});
   if (toIter == fromIter->second.end()) {
     return false;  // edge not found
   }
@@ -174,10 +168,6 @@ set<VertexT> neighbors(VertexT v) const {
 
     return S;
   }
-
-
-
-
 
   //
   // getVertices

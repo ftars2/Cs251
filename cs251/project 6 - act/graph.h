@@ -46,7 +46,7 @@ class graph {
   // AdjMatrix are the edges that start at "ORD" and lead to
   // other vertices.
   //
-  static constexpr int MatrixSize = 100;
+    static constexpr int MatrixSize = 100;
 
   EdgeData         AdjMatrix[MatrixSize][MatrixSize];
   vector<VertexT>  Vertices;
